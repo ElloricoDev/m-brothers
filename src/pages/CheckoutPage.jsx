@@ -1,17 +1,19 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/useCart';
+import { useAuth } from '../context/useAuth';
 import Button from '../components/Button';
 import Icon from '../components/Icon';
 
 export default function CheckoutPage() {
   const navigate = useNavigate();
   const { cart, getTotalPrice, clearCart } = useCart();
+  const { currentUser } = useAuth();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
+    firstName: currentUser?.name?.split(' ')[0] || '',
+    lastName: currentUser?.name?.split(' ').slice(1).join(' ') || '',
+    email: currentUser?.email || '',
     phone: '',
     address: '',
     city: '',
@@ -50,7 +52,8 @@ export default function CheckoutPage() {
         total: finalTotal,
         paymentMethod: formData.paymentMethod,
         date: new Date().toISOString().split('T')[0],
-        status: 'pending'
+        status: 'pending',
+        userId: currentUser.id,
       };
 
       // Save order to localStorage

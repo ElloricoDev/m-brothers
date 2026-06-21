@@ -1,11 +1,13 @@
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/useCart';
+import { useAuth } from '../context/useAuth';
 import CartItem from '../components/CartItem';
 import Button from '../components/Button';
 import Icon from '../components/Icon';
 
 export default function CartPage() {
   const { cart, getTotalPrice } = useCart();
+  const { isAuthenticated } = useAuth();
   const total = getTotalPrice();
 
   if (cart.length === 0) {
@@ -78,14 +80,18 @@ export default function CartPage() {
               <span className="text-3xl font-bold text-red-600">${(total * 1.1).toFixed(2)}</span>
             </div>
 
-            <Link to="/checkout" className="w-full">
+            <Link
+              to={isAuthenticated ? '/checkout' : '/login'}
+              state={isAuthenticated ? undefined : { from: { pathname: '/checkout' } }}
+              className="w-full"
+            >
               <Button 
                 variant="primary"
                 size="lg"
                 className="w-full mb-3"
               >
                 <Icon name="creditCard" className="w-5 h-5" />
-                Proceed to Checkout
+                {isAuthenticated ? 'Proceed to Checkout' : 'Login to Checkout'}
               </Button>
             </Link>
 

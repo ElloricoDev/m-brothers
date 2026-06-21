@@ -2,9 +2,11 @@ import { useParams, Link } from 'react-router-dom';
 import { useMemo } from 'react';
 import Button from '../components/Button';
 import Icon from '../components/Icon';
+import { useAuth } from '../context/useAuth';
 
 export default function SuccessPage() {
   const { orderId } = useParams();
+  const { isAdmin } = useAuth();
   const order = useMemo(() => {
     const orders = JSON.parse(localStorage.getItem('orders') || '[]');
     return orders.find(o => o.orderId === orderId);
@@ -99,7 +101,7 @@ export default function SuccessPage() {
           </h3>
           <ul className="text-gray-700 text-sm space-y-1">
             <li className="flex items-center gap-2"><Icon name="mail" className="w-4 h-4 text-emerald-600" />A confirmation email has been sent to your address</li>
-            <li className="flex items-center gap-2"><Icon name="admin" className="w-4 h-4 text-emerald-600" />You can track your order in the Admin Dashboard</li>
+            <li className="flex items-center gap-2"><Icon name="receipt" className="w-4 h-4 text-emerald-600" />You can track your order in My Orders</li>
             <li className="flex items-center gap-2"><Icon name="truck" className="w-4 h-4 text-emerald-600" />Your order will be shipped within 2-3 business days</li>
             <li className="flex items-center gap-2"><Icon name="checkCircle" className="w-4 h-4 text-emerald-600" />Free shipping on all orders</li>
           </ul>
@@ -117,14 +119,14 @@ export default function SuccessPage() {
               Continue Shopping
             </Button>
           </Link>
-          <Link to="/admin" className="flex-1">
+          <Link to={isAdmin ? '/admin' : '/orders'} className="flex-1">
             <Button 
               variant="secondary"
               size="lg"
               className="w-full"
             >
-              <Icon name="admin" className="w-5 h-5" />
-              View Admin Dashboard
+              <Icon name={isAdmin ? 'admin' : 'receipt'} className="w-5 h-5" />
+              {isAdmin ? 'View Admin Dashboard' : 'Track My Order'}
             </Button>
           </Link>
         </div>

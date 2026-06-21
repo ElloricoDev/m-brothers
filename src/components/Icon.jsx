@@ -83,6 +83,34 @@ const icons = {
       <path d="M4 21a8 8 0 0 1 16 0" />
     </>
   ),
+  userPlus: (
+    <>
+      <circle cx="10" cy="8" r="4" />
+      <path d="M3 21a7 7 0 0 1 11-5.7" />
+      <path d="M19 14v6" />
+      <path d="M16 17h6" />
+    </>
+  ),
+  lock: (
+    <>
+      <rect x="5" y="11" width="14" height="10" rx="2" />
+      <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+    </>
+  ),
+  logIn: (
+    <>
+      <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+      <path d="m10 17 5-5-5-5" />
+      <path d="M15 12H3" />
+    </>
+  ),
+  logOut: (
+    <>
+      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+      <path d="m16 17 5-5-5-5" />
+      <path d="M21 12H9" />
+    </>
+  ),
   mapPin: (
     <>
       <path d="M12 21s7-5.2 7-11a7 7 0 0 0-14 0c0 5.8 7 11 7 11Z" />

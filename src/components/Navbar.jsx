@@ -1,10 +1,12 @@
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/useCart';
+import { useAuth } from '../context/useAuth';
 import Icon from './Icon';
 import logo from '../assets/logo.jpg';
 
 export default function Navbar() {
   const { getTotalItems } = useCart();
+  const { currentUser, isAdmin, logout } = useAuth();
   const cartCount = getTotalItems();
 
   return (
@@ -38,15 +40,39 @@ export default function Navbar() {
               Products
             </Link>
           </li>
-          <li>
-            <Link 
-              to="/admin" 
-              className="flex items-center gap-2 hover:text-amber-200 transition"
-            >
-              <Icon name="admin" className="w-4 h-4" />
-              Admin
-            </Link>
-          </li>
+          {isAdmin && (
+            <li>
+              <Link
+                to="/admin"
+                className="flex items-center gap-2 hover:text-amber-200 transition"
+              >
+                <Icon name="admin" className="w-4 h-4" />
+                Admin
+              </Link>
+            </li>
+          )}
+          {currentUser && !isAdmin && (
+            <>
+              <li>
+                <Link
+                  to="/orders"
+                  className="flex items-center gap-2 hover:text-amber-200 transition"
+                >
+                  <Icon name="receipt" className="w-4 h-4" />
+                  Orders
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/profile"
+                  className="flex items-center gap-2 hover:text-amber-200 transition"
+                >
+                  <Icon name="user" className="w-4 h-4" />
+                  Profile
+                </Link>
+              </li>
+            </>
+          )}
           <li>
             <Link 
               to="/cart" 
@@ -60,6 +86,26 @@ export default function Navbar() {
                 </span>
               )}
             </Link>
+          </li>
+          <li>
+            {currentUser ? (
+              <button
+                type="button"
+                onClick={logout}
+                className="flex items-center gap-2 hover:text-amber-200 transition cursor-pointer"
+              >
+                <Icon name="logOut" className="w-4 h-4" />
+                Logout
+              </button>
+            ) : (
+              <Link
+                to="/login"
+                className="flex items-center gap-2 hover:text-amber-200 transition"
+              >
+                <Icon name="logIn" className="w-4 h-4" />
+                Login
+              </Link>
+            )}
           </li>
         </ul>
       </div>

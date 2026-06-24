@@ -25,7 +25,6 @@ export default function AuthPage({ mode = 'login' }) {
     name: '',
     email: '',
     password: '',
-    role: 'customer',
   });
 
   const redirectPath = useMemo(() => {
@@ -71,7 +70,7 @@ export default function AuthPage({ mode = 'login' }) {
             />
             <h1 className="text-4xl font-bold mb-4">MBrothers</h1>
             <p className="text-amber-100 text-lg">
-              Sign in to place orders, track purchases, and access the right dashboard for your account.
+              Sign in to place orders and track your purchases.
             </p>
           </div>
           <div className="mt-10 grid grid-cols-1 gap-4 text-sm text-amber-50">
@@ -82,10 +81,6 @@ export default function AuthPage({ mode = 'login' }) {
             <div className="flex items-center gap-3">
               <Icon name="lock" className="w-5 h-5" />
               Login is required before placing an order.
-            </div>
-            <div className="flex items-center gap-3">
-              <Icon name="admin" className="w-5 h-5" />
-              Admin accounts go straight to the admin panel.
             </div>
           </div>
         </div>
@@ -100,8 +95,8 @@ export default function AuthPage({ mode = 'login' }) {
             </h2>
             <p className="text-gray-600 mt-2">
               {isRegister
-                ? 'Choose customer for shopping or admin for dashboard access.'
-                : 'Use your account to continue to checkout or admin tools.'}
+                ? 'Create an account to shop faster and track your orders.'
+                : 'Use your account to continue to checkout and manage orders.'}
             </p>
           </div>
 
@@ -154,38 +149,6 @@ export default function AuthPage({ mode = 'login' }) {
               />
             </div>
 
-            {isRegister && (
-              <div>
-                <label className="block text-gray-700 font-semibold mb-2">Role</label>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {[
-                    { value: 'customer', label: 'Customer', icon: 'user' },
-                    { value: 'admin', label: 'Admin', icon: 'admin' },
-                  ].map(role => (
-                    <label
-                      key={role.value}
-                      className={`flex items-center gap-3 border rounded-lg px-4 py-3 cursor-pointer ${
-                        formData.role === role.value
-                          ? 'border-red-500 bg-red-50 text-red-700'
-                          : 'border-gray-300 text-gray-700 hover:border-amber-400'
-                      }`}
-                    >
-                      <input
-                        type="radio"
-                        name="role"
-                        value={role.value}
-                        checked={formData.role === role.value}
-                        onChange={handleInputChange}
-                        className="cursor-pointer"
-                      />
-                      <Icon name={role.icon} className="w-5 h-5" />
-                      <span className="font-semibold">{role.label}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-            )}
-
             <Button type="submit" variant="primary" size="lg" className="w-full">
               <Icon name={isRegister ? 'userPlus' : 'logIn'} className="w-5 h-5" />
               {isRegister ? 'Create Account' : 'Login'}
@@ -210,11 +173,6 @@ export default function AuthPage({ mode = 'login' }) {
             )}
           </div>
 
-          <div className="mt-6 bg-amber-50 border border-amber-200 rounded-lg p-4 text-sm text-gray-700">
-            <p className="font-semibold text-gray-900 mb-1">Demo admin account</p>
-            <p>Email: admin@mbrothers.ph</p>
-            <p>Password: admin123</p>
-          </div>
         </div>
       </div>
     </div>

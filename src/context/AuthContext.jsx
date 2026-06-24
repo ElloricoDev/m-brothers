@@ -74,7 +74,7 @@ export const AuthProvider = ({ children }) => {
     return sessionUser;
   };
 
-  const register = ({ name, email, password, role }) => {
+  const register = ({ name, email, password }) => {
     const normalizedEmail = email.trim().toLowerCase();
     const existingUser = users.find(user => user.email === normalizedEmail);
 
@@ -87,7 +87,7 @@ export const AuthProvider = ({ children }) => {
       name: name.trim(),
       email: normalizedEmail,
       password,
-      role,
+      role: 'customer',
     };
 
     saveUsers([...users, newUser]);

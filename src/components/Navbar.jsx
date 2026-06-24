@@ -1,8 +1,18 @@
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { useCart } from '../context/useCart';
 import { useAuth } from '../context/useAuth';
 import Icon from './Icon';
 import logo from '../assets/logo.jpg';
+
+const navLinkClass = ({ isActive }) =>
+  `flex items-center gap-2 transition ${
+    isActive ? 'text-amber-300 font-semibold' : 'text-white hover:text-amber-200'
+  }`;
+
+const cartLinkClass = ({ isActive }) =>
+  `relative flex items-center gap-2 transition ${
+    isActive ? 'text-amber-300 font-semibold' : 'text-white hover:text-amber-200'
+  }`;
 
 export default function Navbar() {
   const { getTotalItems } = useCart();
@@ -10,7 +20,7 @@ export default function Navbar() {
   const cartCount = getTotalItems();
 
   return (
-    <nav className="bg-gray-950 text-white shadow-lg">
+    <nav className="fixed top-0 left-0 right-0 z-40 bg-gray-950 text-white shadow-lg">
       <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
         <Link to="/" className="flex items-center gap-3 text-2xl font-bold hover:text-amber-200 transition">
           <img
@@ -23,60 +33,61 @@ export default function Navbar() {
 
         <ul className="flex gap-6 items-center">
           <li>
-            <Link 
+            <NavLink 
               to="/" 
-              className="flex items-center gap-2 hover:text-amber-200 transition"
+              end
+              className={navLinkClass}
             >
               <Icon name="home" className="w-4 h-4" />
               Home
-            </Link>
+            </NavLink>
           </li>
           <li>
-            <Link 
+            <NavLink 
               to="/products" 
-              className="flex items-center gap-2 hover:text-amber-200 transition"
+              className={navLinkClass}
             >
               <Icon name="package" className="w-4 h-4" />
               Products
-            </Link>
+            </NavLink>
           </li>
           {isAdmin && (
             <li>
-              <Link
+              <NavLink
                 to="/admin"
-                className="flex items-center gap-2 hover:text-amber-200 transition"
+                className={navLinkClass}
               >
                 <Icon name="admin" className="w-4 h-4" />
                 Admin
-              </Link>
+              </NavLink>
             </li>
           )}
           {currentUser && !isAdmin && (
             <>
               <li>
-                <Link
+                <NavLink
                   to="/orders"
-                  className="flex items-center gap-2 hover:text-amber-200 transition"
+                  className={navLinkClass}
                 >
                   <Icon name="receipt" className="w-4 h-4" />
                   Orders
-                </Link>
+                </NavLink>
               </li>
               <li>
-                <Link
+                <NavLink
                   to="/profile"
-                  className="flex items-center gap-2 hover:text-amber-200 transition"
+                  className={navLinkClass}
                 >
                   <Icon name="user" className="w-4 h-4" />
                   Profile
-                </Link>
+                </NavLink>
               </li>
             </>
           )}
           <li>
-            <Link 
+            <NavLink 
               to="/cart" 
-              className="relative hover:text-amber-200 transition flex items-center gap-2"
+              className={cartLinkClass}
             >
               <Icon name="cart" className="w-4 h-4" />
               Cart
@@ -85,7 +96,7 @@ export default function Navbar() {
                   {cartCount}
                 </span>
               )}
-            </Link>
+            </NavLink>
           </li>
           <li>
             {currentUser ? (
@@ -98,13 +109,13 @@ export default function Navbar() {
                 Logout
               </button>
             ) : (
-              <Link
+              <NavLink
                 to="/login"
-                className="flex items-center gap-2 hover:text-amber-200 transition"
+                className={navLinkClass}
               >
                 <Icon name="logIn" className="w-4 h-4" />
                 Login
-              </Link>
+              </NavLink>
             )}
           </li>
         </ul>

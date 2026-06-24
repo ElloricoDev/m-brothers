@@ -66,7 +66,7 @@ export default function AdminLayout() {
       </aside>
 
       <div className="flex-1 flex flex-col min-w-0">
-        <header className="bg-white border-b border-gray-200 px-8 py-4 flex items-center justify-between">
+        <header className="fixed top-0 left-72 right-0 z-40 h-24 bg-white border-b border-gray-200 px-8 py-4 flex items-center justify-between">
           <div>
             <p className="text-sm font-semibold text-red-600">Management</p>
             <h1 className="text-2xl font-bold text-gray-900">Admin Workspace</h1>
@@ -82,7 +82,7 @@ export default function AdminLayout() {
           </div>
         </header>
 
-        <main className="p-8 flex-1">
+        <main className="p-8 pt-32 flex-1">
           <Outlet />
         </main>
       </div>

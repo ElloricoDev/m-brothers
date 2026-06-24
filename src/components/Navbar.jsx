@@ -29,7 +29,7 @@ export default function Navbar() {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-40 bg-gray-950 text-white shadow-lg">
-      <div className="max-w-7xl mx-auto px-4 py-3 md:py-4 flex justify-between items-center">
+      <div className="max-w-7xl mx-auto px-4 h-16 md:h-20 flex justify-between items-center">
         <Link to="/" onClick={closeMenu} className="flex items-center gap-3 text-xl sm:text-2xl font-bold hover:text-amber-200 transition min-w-0">
           <img
             src={logo}

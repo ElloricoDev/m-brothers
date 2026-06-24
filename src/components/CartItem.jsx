@@ -1,4 +1,5 @@
 import { useCart } from '../context/useCart';
+import { formatPeso } from '../utils/orders';
 import Button from './Button';
 import Icon from './Icon';
 
@@ -14,7 +15,7 @@ export default function CartItem({ item }) {
       />
       <div className="flex-1">
         <h4 className="font-semibold text-gray-800 mb-1">{item.name}</h4>
-        <p className="text-gray-600 text-sm mb-2">${item.price.toFixed(2)} each</p>
+        <p className="text-gray-600 text-sm mb-2">{formatPeso(item.price)} each</p>
         
         <div className="flex items-center gap-2 mb-2">
           <label htmlFor={`qty-${item.id}`} className="text-sm text-gray-600">Qty:</label>
@@ -31,7 +32,7 @@ export default function CartItem({ item }) {
         </div>
 
         <p className="text-lg font-semibold text-red-600 mb-2">
-          Subtotal: ${(item.price * item.quantity).toFixed(2)}
+          Subtotal: {formatPeso(item.price * item.quantity)}
         </p>
 
         <Button 

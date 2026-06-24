@@ -1,6 +1,7 @@
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { mockProducts } from '../data/products';
 import { useCart } from '../context/useCart';
+import { formatPeso } from '../utils/orders';
 import Button from '../components/Button';
 import Icon from '../components/Icon';
 
@@ -64,7 +65,7 @@ export default function ProductDetailsPage() {
 
             {/* Price */}
             <div className="mb-6 pb-6 border-b border-gray-200">
-              <p className="text-4xl font-bold text-red-600">${product.price.toFixed(2)}</p>
+              <p className="text-4xl font-bold text-red-600">{formatPeso(product.price)}</p>
             </div>
 
             {/* Stock Status */}
@@ -141,7 +142,7 @@ export default function ProductDetailsPage() {
                   <h4 className="font-semibold text-gray-800 mb-2 text-sm line-clamp-2">
                     {relatedProduct.name}
                   </h4>
-                  <p className="text-red-600 font-bold">${relatedProduct.price.toFixed(2)}</p>
+                  <p className="text-red-600 font-bold">{formatPeso(relatedProduct.price)}</p>
                 </Link>
               ))}
           </div>

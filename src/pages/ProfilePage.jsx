@@ -3,7 +3,13 @@ import { Link } from 'react-router-dom';
 import Button from '../components/Button';
 import Icon from '../components/Icon';
 import { useAuth } from '../context/useAuth';
-import { getOrdersForUser, loadOrders } from '../utils/orders';
+import {
+  formatPeso,
+  getFulfillmentStatus,
+  getFulfillmentStatusMeta,
+  getOrdersForUser,
+  loadOrders,
+} from '../utils/orders';
 
 export default function ProfilePage() {
   const { currentUser, updateProfile } = useAuth();
@@ -100,7 +106,7 @@ export default function ProfilePage() {
                 <Icon name="dollar" className="w-5 h-5 text-emerald-600" />
                 Total Spent
               </h3>
-              <p className="text-4xl font-bold text-green-600">${totalSpent.toFixed(2)}</p>
+              <p className="text-4xl font-bold text-green-600">{formatPeso(totalSpent)}</p>
             </div>
             <div className="bg-white rounded-lg shadow-md border border-amber-100 p-6">
               <h3 className="text-gray-800 font-bold mb-3 flex items-center gap-2">
@@ -110,7 +116,7 @@ export default function ProfilePage() {
               {latestOrder ? (
                 <div>
                   <p className="font-bold text-red-600">{latestOrder.orderId}</p>
-                  <p className="text-gray-600 text-sm capitalize">{latestOrder.status}</p>
+                  <p className="text-gray-600 text-sm">{getFulfillmentStatusMeta(getFulfillmentStatus(latestOrder)).label}</p>
                 </div>
               ) : (
                 <p className="text-gray-600">No order history yet.</p>

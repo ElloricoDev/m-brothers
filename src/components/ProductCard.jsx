@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/useCart';
+import { formatPeso } from '../utils/orders';
 import Button from './Button';
 import Icon from './Icon';
 
@@ -29,7 +30,7 @@ export default function ProductCard({ product }) {
           </p>
           <div className="flex justify-between items-center mb-4">
             <span className="text-2xl font-bold text-red-600">
-              ${product.price.toFixed(2)}
+              {formatPeso(product.price)}
             </span>
             <span className="text-sm text-emerald-700 font-semibold">
               Stock: {product.stock}

@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/useCart';
 import { useAuth } from '../context/useAuth';
+import { calculateOrderTotals, formatPeso } from '../utils/orders';
 import CartItem from '../components/CartItem';
 import Button from '../components/Button';
 import Icon from '../components/Icon';
@@ -9,6 +10,7 @@ export default function CartPage() {
   const { cart, getTotalPrice } = useCart();
   const { isAuthenticated } = useAuth();
   const total = getTotalPrice();
+  const totals = calculateOrderTotals(cart);
 
   if (cart.length === 0) {
     return (
@@ -63,21 +65,21 @@ export default function CartPage() {
             <div className="space-y-4 mb-6 pb-6 border-b border-gray-200">
               <div className="flex justify-between text-gray-700">
                 <span>Subtotal ({cart.reduce((sum, item) => sum + item.quantity, 0)} items)</span>
-                <span>${total.toFixed(2)}</span>
+                <span>{formatPeso(total)}</span>
               </div>
               <div className="flex justify-between text-gray-700">
                 <span>Shipping</span>
                 <span className="text-green-600 font-semibold">FREE</span>
               </div>
               <div className="flex justify-between text-gray-700">
-                <span>Tax</span>
-                <span>${(total * 0.1).toFixed(2)}</span>
+                <span>VAT included</span>
+                <span>{formatPeso(totals.vatIncluded)}</span>
               </div>
             </div>
 
             <div className="flex justify-between items-center mb-6">
               <span className="text-xl font-bold text-gray-800">Total:</span>
-              <span className="text-3xl font-bold text-red-600">${(total * 1.1).toFixed(2)}</span>
+              <span className="text-3xl font-bold text-red-600">{formatPeso(totals.total)}</span>
             </div>
 
             <Link

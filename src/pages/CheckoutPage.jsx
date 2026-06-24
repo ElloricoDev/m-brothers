@@ -2,6 +2,14 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/useCart';
 import { useAuth } from '../context/useAuth';
+import {
+  calculateOrderTotals,
+  createOrderFromCheckout,
+  formatPeso,
+  getPaymentMethodLabel,
+  loadOrders,
+  saveOrders,
+} from '../utils/orders';
 import Button from '../components/Button';
 import Icon from '../components/Icon';
 
@@ -15,16 +23,19 @@ export default function CheckoutPage() {
     lastName: currentUser?.name?.split(' ').slice(1).join(' ') || '',
     email: currentUser?.email || '',
     phone: '',
-    address: '',
+    street: '',
+    barangay: '',
     city: '',
-    state: '',
-    zipCode: '',
-    paymentMethod: 'credit-card'
+    province: '',
+    postalCode: '',
+    deliveryNotes: '',
+    paymentMethod: 'gcash',
+    gcashName: '',
+    gcashReference: '',
   });
 
   const total = getTotalPrice();
-  const taxAmount = total * 0.1;
-  const finalTotal = total + taxAmount;
+  const totals = calculateOrderTotals(cart);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -38,30 +49,12 @@ export default function CheckoutPage() {
     e.preventDefault();
     setLoading(true);
 
-    // Simulate order processing
     setTimeout(() => {
-      // Create order object
-      const order = {
-        orderId: 'ORD-' + Date.now(),
-        customerName: `${formData.firstName} ${formData.lastName}`,
-        email: formData.email,
-        address: `${formData.address}, ${formData.city}, ${formData.state} ${formData.zipCode}`,
-        items: cart,
-        subtotal: total,
-        tax: taxAmount,
-        total: finalTotal,
-        paymentMethod: formData.paymentMethod,
-        date: new Date().toISOString().split('T')[0],
-        status: 'pending',
-        userId: currentUser.id,
-      };
-
-      // Save order to localStorage
-      const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+      const order = createOrderFromCheckout({ cart, currentUser, formData });
+      const orders = loadOrders();
       orders.push(order);
-      localStorage.setItem('orders', JSON.stringify(orders));
+      saveOrders(orders);
 
-      // Clear cart and redirect
       clearCart();
       navigate(`/success/${order.orderId}`);
     }, 1500);
@@ -154,7 +147,7 @@ export default function CheckoutPage() {
                       onChange={handleInputChange}
                       required
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
-                      placeholder="(555) 123-4567"
+                      placeholder="09XX XXX XXXX"
                     />
                   </div>
                 </div>
@@ -167,20 +160,32 @@ export default function CheckoutPage() {
                   Shipping Address
                 </h2>
                 <div className="mb-4">
-                  <label className="block text-gray-700 font-semibold mb-2">Address</label>
+                  <label className="block text-gray-700 font-semibold mb-2">Street Address</label>
                   <input 
                     type="text"
-                    name="address"
-                    value={formData.address}
+                    name="street"
+                    value={formData.street}
                     onChange={handleInputChange}
                     required
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                    placeholder="123 Main St"
+                    placeholder="House no., street, subdivision"
                   />
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-gray-700 font-semibold mb-2">City</label>
+                    <label className="block text-gray-700 font-semibold mb-2">Barangay</label>
+                    <input 
+                      type="text"
+                      name="barangay"
+                      value={formData.barangay}
+                      onChange={handleInputChange}
+                      required
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                      placeholder="Barangay"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gray-700 font-semibold mb-2">City / Municipality</label>
                     <input 
                       type="text"
                       name="city"
@@ -188,33 +193,44 @@ export default function CheckoutPage() {
                       onChange={handleInputChange}
                       required
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                      placeholder="New York"
+                      placeholder="City or municipality"
                     />
                   </div>
                   <div>
-                    <label className="block text-gray-700 font-semibold mb-2">State</label>
+                    <label className="block text-gray-700 font-semibold mb-2">Province</label>
                     <input 
                       type="text"
-                      name="state"
-                      value={formData.state}
+                      name="province"
+                      value={formData.province}
                       onChange={handleInputChange}
                       required
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                      placeholder="NY"
+                      placeholder="Province"
                     />
                   </div>
                   <div>
-                    <label className="block text-gray-700 font-semibold mb-2">Zip Code</label>
+                    <label className="block text-gray-700 font-semibold mb-2">Postal Code</label>
                     <input 
                       type="text"
-                      name="zipCode"
-                      value={formData.zipCode}
+                      name="postalCode"
+                      value={formData.postalCode}
                       onChange={handleInputChange}
                       required
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                      placeholder="10001"
+                      placeholder="Postal code"
                     />
                   </div>
+                </div>
+                <div className="mt-4">
+                  <label className="block text-gray-700 font-semibold mb-2">Delivery Notes</label>
+                  <textarea
+                    name="deliveryNotes"
+                    value={formData.deliveryNotes}
+                    onChange={handleInputChange}
+                    rows="3"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    placeholder="Landmark, preferred delivery time, or rider instructions"
+                  />
                 </div>
               </div>
 
@@ -224,9 +240,17 @@ export default function CheckoutPage() {
                   <Icon name="creditCard" className="w-6 h-6 text-red-600" />
                   Payment Method
                 </h2>
-                <div className="space-y-2">
-                  {['credit-card', 'paypal', 'bank-transfer'].map(method => (
-                    <label key={method} className="flex items-center gap-3 cursor-pointer">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {['gcash', 'cod'].map(method => (
+                    <label
+                      key={method}
+                      className={`border rounded-lg p-4 cursor-pointer transition ${
+                        formData.paymentMethod === method
+                          ? 'border-red-500 bg-red-50'
+                          : 'border-gray-200 hover:border-amber-300'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
                       <input 
                         type="radio" 
                         name="paymentMethod" 
@@ -235,11 +259,46 @@ export default function CheckoutPage() {
                         onChange={handleInputChange}
                         className="cursor-pointer"
                       />
-                      <Icon name={method === 'credit-card' ? 'creditCard' : method === 'paypal' ? 'dollar' : 'receipt'} className="w-4 h-4 text-gray-500" />
-                      <span className="text-gray-700 capitalize">{method.replace('-', ' ')}</span>
+                        <Icon name={method === 'gcash' ? 'phone' : 'truck'} className="w-5 h-5 text-gray-600" />
+                        <span className="text-gray-800 font-semibold">{getPaymentMethodLabel(method)}</span>
+                      </div>
+                      <p className="text-sm text-gray-600 mt-2">
+                        {method === 'gcash'
+                          ? 'Submit your GCash reference for manual admin verification.'
+                          : 'Pay the rider when your order arrives.'}
+                      </p>
                     </label>
                   ))}
                 </div>
+
+                {formData.paymentMethod === 'gcash' && (
+                  <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 bg-sky-50 border border-sky-100 rounded-lg p-4">
+                    <div>
+                      <label className="block text-gray-700 font-semibold mb-2">GCash Account Name</label>
+                      <input
+                        type="text"
+                        name="gcashName"
+                        value={formData.gcashName}
+                        onChange={handleInputChange}
+                        required
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500"
+                        placeholder="Name on GCash receipt"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-gray-700 font-semibold mb-2">GCash Reference No.</label>
+                      <input
+                        type="text"
+                        name="gcashReference"
+                        value={formData.gcashReference}
+                        onChange={handleInputChange}
+                        required
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500"
+                        placeholder="13-digit reference number"
+                      />
+                    </div>
+                  </div>
+                )}
               </div>
 
               <Button 
@@ -266,7 +325,7 @@ export default function CheckoutPage() {
               {cart.map(item => (
                 <div key={item.id} className="flex justify-between text-sm text-gray-700">
                   <span>{item.name} x {item.quantity}</span>
-                  <span>${(item.price * item.quantity).toFixed(2)}</span>
+                  <span>{formatPeso(item.price * item.quantity)}</span>
                 </div>
               ))}
             </div>
@@ -274,11 +333,11 @@ export default function CheckoutPage() {
             <div className="space-y-2">
               <div className="flex justify-between text-gray-700">
                 <span>Subtotal</span>
-                <span>${total.toFixed(2)}</span>
+                <span>{formatPeso(total)}</span>
               </div>
               <div className="flex justify-between text-gray-700">
-                <span>Tax (10%)</span>
-                <span>${taxAmount.toFixed(2)}</span>
+                <span>VAT included</span>
+                <span>{formatPeso(totals.vatIncluded)}</span>
               </div>
               <div className="flex justify-between text-gray-700">
                 <span>Shipping</span>
@@ -289,7 +348,7 @@ export default function CheckoutPage() {
             <div className="mt-4 pt-4 border-t-2 border-gray-300">
               <div className="flex justify-between items-center">
                 <span className="text-lg font-bold text-gray-800">Total:</span>
-                <span className="text-2xl font-bold text-red-600">${finalTotal.toFixed(2)}</span>
+                <span className="text-2xl font-bold text-red-600">{formatPeso(totals.total)}</span>
               </div>
             </div>
           </div>

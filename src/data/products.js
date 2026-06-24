@@ -2,7 +2,7 @@ export const mockProducts = [
   {
     id: 1,
     name: "Motorcycle Helmet - Full Face",
-    price: 249.99,
+    price: 6500,
     category: "Safety",
     image: "https://via.placeholder.com/300x300?text=Full+Face+Helmet",
     description: "Premium full-face motorcycle helmet with advanced safety features and comfortable padding.",
@@ -11,7 +11,7 @@ export const mockProducts = [
   {
     id: 2,
     name: "Motorcycle Gloves - Racing",
-    price: 89.99,
+    price: 1850,
     category: "Apparel",
     image: "https://via.placeholder.com/300x300?text=Racing+Gloves",
     description: "High-performance racing gloves with reinforced knuckles and palm protection.",
@@ -20,7 +20,7 @@ export const mockProducts = [
   {
     id: 3,
     name: "Motorcycle Jacket - Leather",
-    price: 399.99,
+    price: 8200,
     category: "Apparel",
     image: "https://via.placeholder.com/300x300?text=Leather+Jacket",
     description: "Premium leather motorcycle jacket with armor protection and ventilation.",
@@ -29,7 +29,7 @@ export const mockProducts = [
   {
     id: 4,
     name: "Motorcycle Boots - Touring",
-    price: 179.99,
+    price: 5400,
     category: "Apparel",
     image: "https://via.placeholder.com/300x300?text=Touring+Boots",
     description: "Comfortable touring boots with ankle protection and oil-resistant soles.",
@@ -38,7 +38,7 @@ export const mockProducts = [
   {
     id: 5,
     name: "Motorcycle Handlebar Grips",
-    price: 34.99,
+    price: 650,
     category: "Accessories",
     image: "https://via.placeholder.com/300x300?text=Handlebar+Grips",
     description: "Ergonomic handlebar grips for reduced vibration and improved comfort.",
@@ -47,7 +47,7 @@ export const mockProducts = [
   {
     id: 6,
     name: "Motorcycle Side Mirrors",
-    price: 99.99,
+    price: 1450,
     category: "Accessories",
     image: "https://via.placeholder.com/300x300?text=Side+Mirrors",
     description: "Wide-angle side mirrors with anti-glare coating for better visibility.",
@@ -56,7 +56,7 @@ export const mockProducts = [
   {
     id: 7,
     name: "Motorcycle Chain Lube",
-    price: 12.99,
+    price: 320,
     category: "Maintenance",
     image: "https://via.placeholder.com/300x300?text=Chain+Lube",
     description: "Professional-grade chain lubricant for optimal performance and longevity.",
@@ -65,7 +65,7 @@ export const mockProducts = [
   {
     id: 8,
     name: "Motorcycle Crash Bars",
-    price: 299.99,
+    price: 6800,
     category: "Protection",
     image: "https://via.placeholder.com/300x300?text=Crash+Bars",
     description: "Heavy-duty crash bars to protect your motorcycle frame in case of accidents.",
@@ -74,7 +74,7 @@ export const mockProducts = [
   {
     id: 9,
     name: "Motorcycle Phone Mount",
-    price: 24.99,
+    price: 750,
     category: "Accessories",
     image: "https://via.placeholder.com/300x300?text=Phone+Mount",
     description: "Secure phone mount with 360-degree rotation and vibration damping.",
@@ -83,7 +83,7 @@ export const mockProducts = [
   {
     id: 10,
     name: "Motorcycle Air Filter",
-    price: 44.99,
+    price: 950,
     category: "Maintenance",
     image: "https://via.placeholder.com/300x300?text=Air+Filter",
     description: "High-flow air filter for improved engine performance and fuel efficiency.",

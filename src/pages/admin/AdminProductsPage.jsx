@@ -1,5 +1,6 @@
 import { mockProducts } from '../../data/products';
 import Icon from '../../components/Icon';
+import { formatPeso } from '../../utils/orders';
 
 export default function AdminProductsPage() {
   return (
@@ -40,7 +41,7 @@ export default function AdminProductsPage() {
                     </div>
                   </td>
                   <td className="px-4 py-3 text-gray-700">{product.category}</td>
-                  <td className="px-4 py-3 font-semibold text-green-600">${product.price.toFixed(2)}</td>
+                  <td className="px-4 py-3 font-semibold text-green-600">{formatPeso(product.price)}</td>
                   <td className="px-4 py-3">
                     <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
                       product.stock > 10 ? 'bg-green-100 text-green-800' :

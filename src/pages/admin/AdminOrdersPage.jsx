@@ -1,51 +1,110 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import Button from '../../components/Button';
 import Icon from '../../components/Icon';
-import { getOrderItemsCount, loadOrders, saveOrders } from '../../utils/orders';
+import {
+  FULFILLMENT_STATUSES,
+  PAYMENT_STATUSES,
+  formatOrderDate,
+  formatPeso,
+  formatShippingAddress,
+  getFulfillmentStatus,
+  getFulfillmentStatusMeta,
+  getOrderItemsCount,
+  getPaymentMethodLabel,
+  getPaymentStatus,
+  getPaymentStatusMeta,
+  loadOrders,
+  saveOrders,
+} from '../../utils/orders';
+
+const paymentMethods = {
+  all: 'All methods',
+  gcash: 'GCash',
+  cod: 'COD',
+};
 
 export default function AdminOrdersPage() {
   const [orders, setOrders] = useState(loadOrders);
   const [filterStatus, setFilterStatus] = useState('all');
+  const [filterPaymentMethod, setFilterPaymentMethod] = useState('all');
+  const [filterPaymentStatus, setFilterPaymentStatus] = useState('all');
 
-  const filteredOrders = filterStatus === 'all'
-    ? orders
-    : orders.filter(order => order.status === filterStatus);
+  const filteredOrders = useMemo(() => {
+    return orders.filter(order => {
+      const matchesFulfillment = filterStatus === 'all' || getFulfillmentStatus(order) === filterStatus;
+      const matchesPaymentMethod = filterPaymentMethod === 'all' || order.paymentMethod === filterPaymentMethod;
+      const matchesPaymentStatus = filterPaymentStatus === 'all' || getPaymentStatus(order) === filterPaymentStatus;
 
-  const handleStatusChange = (orderId, newStatus) => {
-    const updatedOrders = orders.map(order =>
-      order.orderId === orderId ? { ...order, status: newStatus } : order
-    );
+      return matchesFulfillment && matchesPaymentMethod && matchesPaymentStatus;
+    });
+  }, [orders, filterStatus, filterPaymentMethod, filterPaymentStatus]);
+
+  const persistOrders = (updatedOrders) => {
     setOrders(updatedOrders);
     saveOrders(updatedOrders);
+  };
+
+  const handleFulfillmentChange = (orderId, newStatus) => {
+    const updatedOrders = orders.map(order =>
+      order.orderId === orderId
+        ? { ...order, fulfillmentStatus: newStatus, status: newStatus }
+        : order
+    );
+    persistOrders(updatedOrders);
+  };
+
+  const handlePaymentStatusChange = (orderId, newStatus) => {
+    const updatedOrders = orders.map(order =>
+      order.orderId === orderId ? { ...order, paymentStatus: newStatus } : order
+    );
+    persistOrders(updatedOrders);
   };
 
   const handleDeleteOrder = (orderId) => {
     const updatedOrders = orders.filter(order => order.orderId !== orderId);
-    setOrders(updatedOrders);
-    saveOrders(updatedOrders);
+    persistOrders(updatedOrders);
   };
 
   return (
     <div>
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+      <div className="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4 mb-8">
         <div>
           <h2 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
             <Icon name="receipt" className="w-8 h-8 text-red-600" />
             Orders
           </h2>
-          <p className="text-gray-600 mt-2">Review customer orders and update fulfillment status.</p>
+          <p className="text-gray-600 mt-2">Verify payments, prepare orders, and update delivery movement.</p>
         </div>
-        <div className="flex gap-2 flex-wrap">
-          {['all', 'pending', 'processing', 'shipped'].map(status => (
-            <Button
-              key={status}
-              variant={filterStatus === status ? 'primary' : 'secondary'}
-              size="sm"
-              onClick={() => setFilterStatus(status)}
-            >
-              {status.charAt(0).toUpperCase() + status.slice(1)}
-            </Button>
-          ))}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full xl:w-auto">
+          <select
+            value={filterStatus}
+            onChange={(event) => setFilterStatus(event.target.value)}
+            className="px-3 py-2 rounded-lg border border-gray-300 bg-white text-sm"
+          >
+            <option value="all">All fulfillment</option>
+            {Object.entries(FULFILLMENT_STATUSES).map(([status, meta]) => (
+              <option key={status} value={status}>{meta.label}</option>
+            ))}
+          </select>
+          <select
+            value={filterPaymentMethod}
+            onChange={(event) => setFilterPaymentMethod(event.target.value)}
+            className="px-3 py-2 rounded-lg border border-gray-300 bg-white text-sm"
+          >
+            {Object.entries(paymentMethods).map(([method, label]) => (
+              <option key={method} value={method}>{label}</option>
+            ))}
+          </select>
+          <select
+            value={filterPaymentStatus}
+            onChange={(event) => setFilterPaymentStatus(event.target.value)}
+            className="px-3 py-2 rounded-lg border border-gray-300 bg-white text-sm"
+          >
+            <option value="all">All payments</option>
+            {Object.entries(PAYMENT_STATUSES).map(([status, meta]) => (
+              <option key={status} value={status}>{meta.label}</option>
+            ))}
+          </select>
         </div>
       </div>
 
@@ -55,60 +114,85 @@ export default function AdminOrdersPage() {
             <table className="w-full text-left text-sm">
               <thead className="bg-gray-100 border-b border-gray-300">
                 <tr>
-                  <th className="px-4 py-3 font-semibold text-gray-700">Order ID</th>
+                  <th className="px-4 py-3 font-semibold text-gray-700">Order</th>
                   <th className="px-4 py-3 font-semibold text-gray-700">Customer</th>
+                  <th className="px-4 py-3 font-semibold text-gray-700">Payment</th>
                   <th className="px-4 py-3 font-semibold text-gray-700">Items</th>
                   <th className="px-4 py-3 font-semibold text-gray-700">Total</th>
-                  <th className="px-4 py-3 font-semibold text-gray-700">Date</th>
-                  <th className="px-4 py-3 font-semibold text-gray-700">Status</th>
+                  <th className="px-4 py-3 font-semibold text-gray-700">Fulfillment</th>
+                  <th className="px-4 py-3 font-semibold text-gray-700">Payment Status</th>
                   <th className="px-4 py-3 font-semibold text-gray-700">Action</th>
                 </tr>
               </thead>
               <tbody>
-                {filteredOrders.map(order => (
-                  <tr key={order.orderId} className="border-b border-gray-200 hover:bg-gray-50">
-                    <td className="px-4 py-3 font-semibold text-red-600">{order.orderId}</td>
-                    <td className="px-4 py-3">
-                      <div>
+                {filteredOrders.map(order => {
+                  const fulfillmentMeta = getFulfillmentStatusMeta(getFulfillmentStatus(order));
+                  const paymentMeta = getPaymentStatusMeta(getPaymentStatus(order));
+
+                  return (
+                    <tr key={order.orderId} className="border-b border-gray-200 align-top hover:bg-gray-50">
+                      <td className="px-4 py-4 min-w-44">
+                        <p className="font-semibold text-red-600">{order.orderId}</p>
+                        <p className="text-gray-600 text-xs">{formatOrderDate(order)}</p>
+                      </td>
+                      <td className="px-4 py-4 min-w-64">
                         <p className="font-semibold text-gray-800">{order.customerName}</p>
                         <p className="text-gray-600 text-xs">{order.email}</p>
-                      </div>
-                    </td>
-                    <td className="px-4 py-3">
-                      <span className="bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-xs font-semibold inline-flex items-center gap-1">
-                        <Icon name="boxes" className="w-3 h-3" />
-                        {getOrderItemsCount(order)}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3 font-semibold text-green-600">${order.total.toFixed(2)}</td>
-                    <td className="px-4 py-3 text-gray-700">{order.date}</td>
-                    <td className="px-4 py-3">
-                      <select
-                        value={order.status}
-                        onChange={(event) => handleStatusChange(order.orderId, event.target.value)}
-                        className={`px-3 py-1 rounded-full text-xs font-semibold border-0 cursor-pointer ${
-                          order.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                          order.status === 'processing' ? 'bg-purple-100 text-purple-800' :
-                          'bg-green-100 text-green-800'
-                        }`}
-                      >
-                        <option value="pending">Pending</option>
-                        <option value="processing">Processing</option>
-                        <option value="shipped">Shipped</option>
-                      </select>
-                    </td>
-                    <td className="px-4 py-3">
-                      <Button
-                        variant="danger"
-                        size="sm"
-                        onClick={() => handleDeleteOrder(order.orderId)}
-                      >
-                        <Icon name="trash" className="w-4 h-4" />
-                        Delete
-                      </Button>
-                    </td>
-                  </tr>
-                ))}
+                        {order.phone && <p className="text-gray-600 text-xs">{order.phone}</p>}
+                        <p className="text-gray-500 text-xs mt-2 max-w-xs">{formatShippingAddress(order)}</p>
+                        {order.deliveryNotes && <p className="text-amber-700 text-xs mt-1">Note: {order.deliveryNotes}</p>}
+                      </td>
+                      <td className="px-4 py-4 min-w-52">
+                        <p className="font-semibold text-gray-800">{getPaymentMethodLabel(order.paymentMethod)}</p>
+                        {order.paymentDetails?.accountName && (
+                          <p className="text-gray-600 text-xs">Name: {order.paymentDetails.accountName}</p>
+                        )}
+                        {order.paymentDetails?.referenceNumber && (
+                          <p className="text-gray-600 text-xs">Ref: {order.paymentDetails.referenceNumber}</p>
+                        )}
+                      </td>
+                      <td className="px-4 py-4">
+                        <span className="bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-xs font-semibold inline-flex items-center gap-1">
+                          <Icon name="boxes" className="w-3 h-3" />
+                          {getOrderItemsCount(order)}
+                        </span>
+                      </td>
+                      <td className="px-4 py-4 font-semibold text-green-600">{formatPeso(order.total)}</td>
+                      <td className="px-4 py-4 min-w-44">
+                        <select
+                          value={getFulfillmentStatus(order)}
+                          onChange={(event) => handleFulfillmentChange(order.orderId, event.target.value)}
+                          className={`px-3 py-2 rounded-lg text-xs font-semibold border-0 cursor-pointer ${fulfillmentMeta.className}`}
+                        >
+                          {Object.entries(FULFILLMENT_STATUSES).map(([status, meta]) => (
+                            <option key={status} value={status}>{meta.label}</option>
+                          ))}
+                        </select>
+                      </td>
+                      <td className="px-4 py-4 min-w-56">
+                        <select
+                          value={getPaymentStatus(order)}
+                          onChange={(event) => handlePaymentStatusChange(order.orderId, event.target.value)}
+                          className={`px-3 py-2 rounded-lg text-xs font-semibold border-0 cursor-pointer ${paymentMeta.className}`}
+                        >
+                          {Object.entries(PAYMENT_STATUSES).map(([status, meta]) => (
+                            <option key={status} value={status}>{meta.label}</option>
+                          ))}
+                        </select>
+                      </td>
+                      <td className="px-4 py-4">
+                        <Button
+                          variant="danger"
+                          size="sm"
+                          onClick={() => handleDeleteOrder(order.orderId)}
+                        >
+                          <Icon name="trash" className="w-4 h-4" />
+                          Delete
+                        </Button>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

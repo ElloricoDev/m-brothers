@@ -1,14 +1,23 @@
 import { Link } from 'react-router-dom';
 import { mockProducts } from '../../data/products';
 import Icon from '../../components/Icon';
-import { getOrderItemsCount, loadOrders } from '../../utils/orders';
+import {
+  formatPeso,
+  getFulfillmentStatus,
+  getFulfillmentStatusMeta,
+  getOrderItemsCount,
+  getPaymentStatus,
+  loadOrders,
+} from '../../utils/orders';
 
 export default function AdminDashboardPage() {
   const orders = loadOrders();
   const totalOrders = orders.length;
   const totalRevenue = orders.reduce((sum, order) => sum + order.total, 0);
   const totalItems = orders.reduce((sum, order) => sum + getOrderItemsCount(order), 0);
-  const pendingOrders = orders.filter(order => order.status === 'pending').length;
+  const pendingOrders = orders.filter(order => getFulfillmentStatus(order) === 'pending').length;
+  const gcashToVerify = orders.filter(order => getPaymentStatus(order) === 'pending_verification').length;
+  const codOrders = orders.filter(order => order.paymentMethod === 'cod').length;
   const recentOrders = orders.slice(-5).reverse();
   const lowStockProducts = mockProducts.filter(product => product.stock <= 10);
 
@@ -22,34 +31,48 @@ export default function AdminDashboardPage() {
         <p className="text-gray-600 mt-2">Monitor sales, order movement, and product inventory.</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-6 gap-4 mb-8">
         <div className="bg-white rounded-lg shadow-md p-6 border border-red-100">
           <h3 className="text-gray-600 font-semibold mb-2 flex items-center gap-2">
             <Icon name="receipt" className="w-5 h-5 text-red-600" />
             Total Orders
           </h3>
-          <p className="text-4xl font-bold text-red-600">{totalOrders}</p>
+          <p className="text-3xl font-bold text-red-600">{totalOrders}</p>
         </div>
         <div className="bg-white rounded-lg shadow-md p-6 border border-emerald-100">
           <h3 className="text-gray-600 font-semibold mb-2 flex items-center gap-2">
             <Icon name="dollar" className="w-5 h-5 text-emerald-600" />
             Revenue
           </h3>
-          <p className="text-4xl font-bold text-green-600">${totalRevenue.toFixed(2)}</p>
+          <p className="text-3xl font-bold text-green-600">{formatPeso(totalRevenue)}</p>
         </div>
         <div className="bg-white rounded-lg shadow-md p-6 border border-purple-100">
           <h3 className="text-gray-600 font-semibold mb-2 flex items-center gap-2">
             <Icon name="boxes" className="w-5 h-5 text-purple-600" />
             Items Sold
           </h3>
-          <p className="text-4xl font-bold text-purple-600">{totalItems}</p>
+          <p className="text-3xl font-bold text-purple-600">{totalItems}</p>
         </div>
         <div className="bg-white rounded-lg shadow-md p-6 border border-orange-100">
           <h3 className="text-gray-600 font-semibold mb-2 flex items-center gap-2">
             <Icon name="truck" className="w-5 h-5 text-orange-600" />
             Pending
           </h3>
-          <p className="text-4xl font-bold text-orange-600">{pendingOrders}</p>
+          <p className="text-3xl font-bold text-orange-600">{pendingOrders}</p>
+        </div>
+        <div className="bg-white rounded-lg shadow-md p-6 border border-sky-100">
+          <h3 className="text-gray-600 font-semibold mb-2 flex items-center gap-2">
+            <Icon name="phone" className="w-5 h-5 text-sky-600" />
+            GCash Verify
+          </h3>
+          <p className="text-3xl font-bold text-sky-600">{gcashToVerify}</p>
+        </div>
+        <div className="bg-white rounded-lg shadow-md p-6 border border-amber-100">
+          <h3 className="text-gray-600 font-semibold mb-2 flex items-center gap-2">
+            <Icon name="truck" className="w-5 h-5 text-amber-600" />
+            COD
+          </h3>
+          <p className="text-3xl font-bold text-amber-600">{codOrders}</p>
         </div>
       </div>
 
@@ -72,8 +95,8 @@ export default function AdminDashboardPage() {
                     <p className="text-sm text-gray-600">{order.customerName}</p>
                   </div>
                   <div className="text-right">
-                    <p className="font-bold text-gray-900">${order.total.toFixed(2)}</p>
-                    <p className="text-sm capitalize text-gray-500">{order.status}</p>
+                    <p className="font-bold text-gray-900">{formatPeso(order.total)}</p>
+                    <p className="text-sm text-gray-500">{getFulfillmentStatusMeta(getFulfillmentStatus(order)).label}</p>
                   </div>
                 </div>
               ))}

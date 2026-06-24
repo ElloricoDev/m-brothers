@@ -3,6 +3,16 @@ import { useMemo } from 'react';
 import Button from '../components/Button';
 import Icon from '../components/Icon';
 import { useAuth } from '../context/useAuth';
+import {
+  formatOrderDate,
+  formatPeso,
+  formatShippingAddress,
+  getFulfillmentStatus,
+  getFulfillmentStatusMeta,
+  getPaymentMethodLabel,
+  getPaymentStatus,
+  getPaymentStatusMeta,
+} from '../utils/orders';
 
 export default function SuccessPage() {
   const { orderId } = useParams();
@@ -37,7 +47,7 @@ export default function SuccessPage() {
                   <Icon name="calendar" className="w-4 h-4 text-amber-600" />
                   Order Date
                 </p>
-                <p className="text-2xl font-bold text-gray-800">{order.date}</p>
+                <p className="text-2xl font-bold text-gray-800">{formatOrderDate(order)}</p>
               </div>
             </div>
 
@@ -47,14 +57,16 @@ export default function SuccessPage() {
                 <p className="text-gray-800">{order.customerName}</p>
               </div>
               <div>
-                <p className="text-gray-600 font-semibold mb-2">Email</p>
+                <p className="text-gray-600 font-semibold mb-2">Contact</p>
                 <p className="text-gray-800">{order.email}</p>
+                {order.phone && <p className="text-gray-800">{order.phone}</p>}
               </div>
             </div>
 
             <div className="mt-6">
               <p className="text-gray-600 font-semibold mb-2">Shipping Address</p>
-              <p className="text-gray-800">{order.address}</p>
+              <p className="text-gray-800">{formatShippingAddress(order)}</p>
+              {order.deliveryNotes && <p className="text-gray-600 text-sm mt-1">Note: {order.deliveryNotes}</p>}
             </div>
 
             {/* Order Items */}
@@ -64,7 +76,7 @@ export default function SuccessPage() {
                 {order.items.map(item => (
                   <div key={item.id} className="flex justify-between text-gray-800">
                     <span>{item.name} x {item.quantity}</span>
-                    <span>${(item.price * item.quantity).toFixed(2)}</span>
+                    <span>{formatPeso(item.price * item.quantity)}</span>
                   </div>
                 ))}
               </div>
@@ -74,21 +86,39 @@ export default function SuccessPage() {
             <div className="mt-6 pt-6 border-t border-gray-300">
               <div className="flex justify-between mb-2">
                 <span className="text-gray-700">Subtotal:</span>
-                <span className="font-semibold text-gray-800">${order.subtotal.toFixed(2)}</span>
+                <span className="font-semibold text-gray-800">{formatPeso(order.subtotal)}</span>
               </div>
               <div className="flex justify-between mb-2">
-                <span className="text-gray-700">Tax (10%):</span>
-                <span className="font-semibold text-gray-800">${order.tax.toFixed(2)}</span>
+                <span className="text-gray-700">VAT included:</span>
+                <span className="font-semibold text-gray-800">{formatPeso(order.vatIncluded || 0)}</span>
+              </div>
+              <div className="flex justify-between mb-2">
+                <span className="text-gray-700">Shipping:</span>
+                <span className="font-semibold text-gray-800">{formatPeso(order.shipping || 0)}</span>
               </div>
               <div className="flex justify-between text-lg font-bold text-red-600">
                 <span>Total:</span>
-                <span>${order.total.toFixed(2)}</span>
+                <span>{formatPeso(order.total)}</span>
               </div>
             </div>
 
             <div className="mt-4 p-4 bg-amber-50 rounded-lg">
-              <p className="text-gray-700"><strong>Payment Method:</strong> {order.paymentMethod.replace('-', ' ')}</p>
-              <p className="text-gray-700"><strong>Status:</strong> <span className="text-orange-600 font-semibold capitalize">{order.status}</span></p>
+              <p className="text-gray-700"><strong>Payment Method:</strong> {getPaymentMethodLabel(order.paymentMethod)}</p>
+              {order.paymentDetails?.referenceNumber && (
+                <p className="text-gray-700"><strong>GCash Reference:</strong> {order.paymentDetails.referenceNumber}</p>
+              )}
+              <p className="text-gray-700">
+                <strong>Payment:</strong>{' '}
+                <span className={`px-2 py-1 rounded-full text-xs font-semibold ${getPaymentStatusMeta(getPaymentStatus(order)).className}`}>
+                  {getPaymentStatusMeta(getPaymentStatus(order)).label}
+                </span>
+              </p>
+              <p className="text-gray-700 mt-2">
+                <strong>Fulfillment:</strong>{' '}
+                <span className={`px-2 py-1 rounded-full text-xs font-semibold ${getFulfillmentStatusMeta(getFulfillmentStatus(order)).className}`}>
+                  {getFulfillmentStatusMeta(getFulfillmentStatus(order)).label}
+                </span>
+              </p>
             </div>
           </div>
         )}
@@ -100,10 +130,10 @@ export default function SuccessPage() {
             What's Next?
           </h3>
           <ul className="text-gray-700 text-sm space-y-1">
-            <li className="flex items-center gap-2"><Icon name="mail" className="w-4 h-4 text-emerald-600" />A confirmation email has been sent to your address</li>
+            <li className="flex items-center gap-2"><Icon name="mail" className="w-4 h-4 text-emerald-600" />A confirmation has been saved to your account</li>
             <li className="flex items-center gap-2"><Icon name="receipt" className="w-4 h-4 text-emerald-600" />You can track your order in My Orders</li>
-            <li className="flex items-center gap-2"><Icon name="truck" className="w-4 h-4 text-emerald-600" />Your order will be shipped within 2-3 business days</li>
-            <li className="flex items-center gap-2"><Icon name="checkCircle" className="w-4 h-4 text-emerald-600" />Free shipping on all orders</li>
+            <li className="flex items-center gap-2"><Icon name="truck" className="w-4 h-4 text-emerald-600" />Metro and provincial delivery updates appear after admin processing</li>
+            <li className="flex items-center gap-2"><Icon name="checkCircle" className="w-4 h-4 text-emerald-600" />GCash orders are manually verified before fulfillment</li>
           </ul>
         </div>
 

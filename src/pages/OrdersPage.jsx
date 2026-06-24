@@ -2,13 +2,19 @@ import { Link } from 'react-router-dom';
 import Button from '../components/Button';
 import Icon from '../components/Icon';
 import { useAuth } from '../context/useAuth';
-import { getOrderItemsCount, getOrdersForUser, loadOrders } from '../utils/orders';
-
-const statusStyles = {
-  pending: 'bg-yellow-100 text-yellow-800',
-  processing: 'bg-purple-100 text-purple-800',
-  shipped: 'bg-green-100 text-green-800',
-};
+import {
+  formatOrderDate,
+  formatPeso,
+  formatShippingAddress,
+  getFulfillmentStatus,
+  getFulfillmentStatusMeta,
+  getOrderItemsCount,
+  getOrdersForUser,
+  getPaymentMethodLabel,
+  getPaymentStatus,
+  getPaymentStatusMeta,
+  loadOrders,
+} from '../utils/orders';
 
 export default function OrdersPage() {
   const { currentUser } = useAuth();
@@ -41,13 +47,16 @@ export default function OrdersPage() {
                   <div>
                     <p className="text-sm text-gray-500">Order Number</p>
                     <h2 className="text-xl font-bold text-red-600">{order.orderId}</h2>
-                    <p className="text-sm text-gray-600 mt-1">Placed on {order.date}</p>
+                    <p className="text-sm text-gray-600 mt-1">Placed on {formatOrderDate(order)}</p>
                   </div>
                   <div className="flex flex-col md:items-end gap-2">
-                    <span className={`capitalize px-3 py-1 rounded-full text-xs font-semibold ${statusStyles[order.status] || statusStyles.pending}`}>
-                      {order.status}
+                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getFulfillmentStatusMeta(getFulfillmentStatus(order)).className}`}>
+                      {getFulfillmentStatusMeta(getFulfillmentStatus(order)).label}
                     </span>
-                    <p className="text-2xl font-bold text-gray-900">${order.total.toFixed(2)}</p>
+                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getPaymentStatusMeta(getPaymentStatus(order)).className}`}>
+                      {getPaymentStatusMeta(getPaymentStatus(order)).label}
+                    </span>
+                    <p className="text-2xl font-bold text-gray-900">{formatPeso(order.total)}</p>
                   </div>
                 </div>
 
@@ -59,7 +68,7 @@ export default function OrdersPage() {
                           <p className="font-semibold text-gray-800">{item.name}</p>
                           <p className="text-sm text-gray-500">Qty {item.quantity}</p>
                         </div>
-                        <p className="font-semibold text-gray-800">${(item.price * item.quantity).toFixed(2)}</p>
+                        <p className="font-semibold text-gray-800">{formatPeso(item.price * item.quantity)}</p>
                       </div>
                     ))}
                   </div>
@@ -71,8 +80,9 @@ export default function OrdersPage() {
                     </p>
                     <div className="space-y-2 text-sm text-gray-700">
                       <p>Items: {getOrderItemsCount(order)}</p>
-                      <p>Payment: {order.paymentMethod.replace('-', ' ')}</p>
-                      <p>Ship to: {order.address}</p>
+                      <p>Payment: {getPaymentMethodLabel(order.paymentMethod)}</p>
+                      <p>Ship to: {formatShippingAddress(order)}</p>
+                      {order.deliveryNotes && <p>Notes: {order.deliveryNotes}</p>}
                     </div>
                   </div>
                 </div>

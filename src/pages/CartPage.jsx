@@ -33,7 +33,7 @@ export default function CartPage() {
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-6xl mx-auto px-4">
-        <h1 className="text-4xl font-bold text-gray-800 mb-8 flex items-center gap-3">
+        <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-8 flex items-center gap-3">
           <Icon name="cart" className="w-8 h-8 text-red-600" />
           Shopping Cart
         </h1>
@@ -56,7 +56,7 @@ export default function CartPage() {
           </div>
 
           {/* Order Summary */}
-          <div className="bg-white rounded-lg shadow-lg p-6 h-fit border border-amber-100">
+          <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 h-fit border border-amber-100">
             <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
               <Icon name="receipt" className="w-6 h-6 text-amber-600" />
               Order Summary
@@ -79,7 +79,7 @@ export default function CartPage() {
 
             <div className="flex justify-between items-center mb-6">
               <span className="text-xl font-bold text-gray-800">Total:</span>
-              <span className="text-3xl font-bold text-red-600">{formatPeso(totals.total)}</span>
+              <span className="text-2xl sm:text-3xl font-bold text-red-600">{formatPeso(totals.total)}</span>
             </div>
 
             <Link

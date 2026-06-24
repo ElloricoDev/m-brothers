@@ -13,8 +13,37 @@ export default function AdminProductsPage() {
         <p className="text-gray-600 mt-2">Review product pricing, categories, and stock levels.</p>
       </div>
 
-      <div className="bg-white rounded-lg shadow-lg p-6">
-        <div className="overflow-x-auto">
+      <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6">
+        <div className="md:hidden space-y-4">
+          {mockProducts.map(product => (
+            <article key={product.id} className="border border-gray-200 rounded-lg p-4">
+              <div className="flex gap-3">
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="w-20 h-20 rounded-lg object-cover shrink-0"
+                />
+                <div className="min-w-0 flex-1">
+                  <p className="font-semibold text-gray-900">{product.name}</p>
+                  <p className="text-xs text-gray-500 line-clamp-2">{product.description}</p>
+                  <div className="mt-3 flex items-center justify-between gap-3">
+                    <span className="font-semibold text-green-600">{formatPeso(product.price)}</span>
+                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                      product.stock > 10 ? 'bg-green-100 text-green-800' :
+                      product.stock > 0 ? 'bg-yellow-100 text-yellow-800' :
+                      'bg-red-100 text-red-800'
+                    }`}>
+                      Stock {product.stock}
+                    </span>
+                  </div>
+                  <p className="mt-2 text-xs font-semibold text-amber-700">{product.category}</p>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-left text-sm">
             <thead className="bg-gray-100 border-b border-gray-300">
               <tr>

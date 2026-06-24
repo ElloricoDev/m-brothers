@@ -49,6 +49,19 @@ const icons = {
       <path d="M10 18h4" />
     </>
   ),
+  menu: (
+    <>
+      <path d="M4 6h16" />
+      <path d="M4 12h16" />
+      <path d="M4 18h16" />
+    </>
+  ),
+  close: (
+    <>
+      <path d="m18 6-12 12" />
+      <path d="m6 6 12 12" />
+    </>
+  ),
   plus: (
     <>
       <path d="M12 5v14" />

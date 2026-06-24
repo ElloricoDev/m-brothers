@@ -7,11 +7,11 @@ export default function CartItem({ item }) {
   const { updateQuantity, removeFromCart } = useCart();
 
   return (
-    <div className="flex gap-4 p-4 bg-white rounded-lg shadow-sm border border-amber-100">
+    <div className="flex flex-col sm:flex-row gap-4 p-4 bg-white rounded-lg shadow-sm border border-amber-100">
       <img 
         src={item.image} 
         alt={item.name}
-        className="w-24 h-24 object-cover rounded-md"
+        className="w-full sm:w-24 h-40 sm:h-24 object-cover rounded-md"
       />
       <div className="flex-1">
         <h4 className="font-semibold text-gray-800 mb-1">{item.name}</h4>
@@ -39,6 +39,7 @@ export default function CartItem({ item }) {
           variant="danger"
           size="sm"
           onClick={() => removeFromCart(item.id)}
+          className="w-full sm:w-auto"
         >
           <Icon name="trash" className="w-4 h-4" />
           Remove

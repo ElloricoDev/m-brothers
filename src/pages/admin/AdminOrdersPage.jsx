@@ -110,7 +110,90 @@ export default function AdminOrdersPage() {
 
       <div className="bg-white rounded-lg shadow-lg p-6">
         {filteredOrders.length > 0 ? (
-          <div className="overflow-x-auto">
+          <>
+          <div className="lg:hidden space-y-4">
+            {filteredOrders.map(order => {
+              const fulfillmentMeta = getFulfillmentStatusMeta(getFulfillmentStatus(order));
+              const paymentMeta = getPaymentStatusMeta(getPaymentStatus(order));
+
+              return (
+                <article key={order.orderId} className="border border-gray-200 rounded-lg p-4 space-y-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="font-semibold text-red-600">{order.orderId}</p>
+                      <p className="text-xs text-gray-500">{formatOrderDate(order)}</p>
+                    </div>
+                    <p className="font-bold text-green-600 text-right">{formatPeso(order.total)}</p>
+                  </div>
+
+                  <div>
+                    <p className="font-semibold text-gray-900">{order.customerName}</p>
+                    <p className="text-sm text-gray-600 break-words">{order.email}</p>
+                    {order.phone && <p className="text-sm text-gray-600">{order.phone}</p>}
+                    <p className="text-sm text-gray-500 mt-2">{formatShippingAddress(order)}</p>
+                    {order.deliveryNotes && <p className="text-sm text-amber-700 mt-1">Note: {order.deliveryNotes}</p>}
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3 text-sm">
+                    <div className="bg-gray-50 rounded-lg p-3">
+                      <p className="text-gray-500">Items</p>
+                      <p className="font-semibold text-gray-900">{getOrderItemsCount(order)}</p>
+                    </div>
+                    <div className="bg-gray-50 rounded-lg p-3">
+                      <p className="text-gray-500">Payment</p>
+                      <p className="font-semibold text-gray-900">{getPaymentMethodLabel(order.paymentMethod)}</p>
+                    </div>
+                  </div>
+
+                  {(order.paymentDetails?.accountName || order.paymentDetails?.referenceNumber) && (
+                    <div className="bg-sky-50 border border-sky-100 rounded-lg p-3 text-sm text-gray-700">
+                      {order.paymentDetails?.accountName && <p>Name: {order.paymentDetails.accountName}</p>}
+                      {order.paymentDetails?.referenceNumber && <p>Ref: {order.paymentDetails.referenceNumber}</p>}
+                    </div>
+                  )}
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <label className="text-sm font-semibold text-gray-700">
+                      Fulfillment
+                      <select
+                        value={getFulfillmentStatus(order)}
+                        onChange={(event) => handleFulfillmentChange(order.orderId, event.target.value)}
+                        className={`mt-2 w-full px-3 py-2 rounded-lg text-xs font-semibold border-0 cursor-pointer ${fulfillmentMeta.className}`}
+                      >
+                        {Object.entries(FULFILLMENT_STATUSES).map(([status, meta]) => (
+                          <option key={status} value={status}>{meta.label}</option>
+                        ))}
+                      </select>
+                    </label>
+                    <label className="text-sm font-semibold text-gray-700">
+                      Payment Status
+                      <select
+                        value={getPaymentStatus(order)}
+                        onChange={(event) => handlePaymentStatusChange(order.orderId, event.target.value)}
+                        className={`mt-2 w-full px-3 py-2 rounded-lg text-xs font-semibold border-0 cursor-pointer ${paymentMeta.className}`}
+                      >
+                        {Object.entries(PAYMENT_STATUSES).map(([status, meta]) => (
+                          <option key={status} value={status}>{meta.label}</option>
+                        ))}
+                      </select>
+                    </label>
+                  </div>
+
+                  <Button
+                    variant="danger"
+                    size="sm"
+                    onClick={() => handleDeleteOrder(order.orderId)}
+                    className="w-full"
+                  >
+                    <Icon name="trash" className="w-4 h-4" />
+                    Delete
+                  </Button>
+                </article>
+              );
+            })}
+          </div>
+
+          <div className="hidden lg:block overflow-x-auto">
             <table className="w-full text-left text-sm">
               <thead className="bg-gray-100 border-b border-gray-300">
                 <tr>
@@ -196,6 +279,7 @@ export default function AdminOrdersPage() {
               </tbody>
             </table>
           </div>
+          </>
         ) : (
           <div className="text-center py-12">
             <Icon name="receipt" className="w-10 h-10 text-amber-500 mx-auto mb-3" />

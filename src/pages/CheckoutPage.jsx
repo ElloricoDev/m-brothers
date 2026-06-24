@@ -84,7 +84,7 @@ export default function CheckoutPage() {
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-6xl mx-auto px-4">
-        <h1 className="text-4xl font-bold text-gray-800 mb-8 flex items-center gap-3">
+        <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-8 flex items-center gap-3">
           <Icon name="creditCard" className="w-8 h-8 text-red-600" />
           Checkout
         </h1>
@@ -94,8 +94,8 @@ export default function CheckoutPage() {
           <div className="lg:col-span-2">
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Personal Information */}
-              <div className="bg-white rounded-lg shadow-md p-6 border border-amber-100">
-                <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+              <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 border border-amber-100">
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
                   <Icon name="user" className="w-6 h-6 text-amber-600" />
                   Personal Information
                 </h2>
@@ -154,8 +154,8 @@ export default function CheckoutPage() {
               </div>
 
               {/* Shipping Address */}
-              <div className="bg-white rounded-lg shadow-md p-6 border border-amber-100">
-                <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+              <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 border border-amber-100">
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
                   <Icon name="mapPin" className="w-6 h-6 text-emerald-600" />
                   Shipping Address
                 </h2>
@@ -235,8 +235,8 @@ export default function CheckoutPage() {
               </div>
 
               {/* Payment Method */}
-              <div className="bg-white rounded-lg shadow-md p-6 border border-amber-100">
-                <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+              <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 border border-amber-100">
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
                   <Icon name="creditCard" className="w-6 h-6 text-red-600" />
                   Payment Method
                 </h2>
@@ -315,8 +315,8 @@ export default function CheckoutPage() {
           </div>
 
           {/* Order Summary */}
-          <div className="bg-white rounded-lg shadow-lg p-6 h-fit border border-amber-100">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+          <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 h-fit border border-amber-100">
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
               <Icon name="receipt" className="w-6 h-6 text-amber-600" />
               Order Summary
             </h2>

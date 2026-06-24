@@ -37,19 +37,19 @@ export default function ProductDetailsPage() {
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-7xl mx-auto px-4">
         {/* Breadcrumb */}
-        <div className="mb-6 text-gray-600">
+        <div className="mb-6 text-gray-600 text-sm sm:text-base break-words">
           <Link to="/products" className="hover:text-red-600">Products</Link>
           <span className="mx-2">/</span>
           <span>{product.name}</span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 bg-white rounded-lg shadow-lg p-8 border border-amber-100">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 bg-white rounded-lg shadow-lg p-4 sm:p-6 md:p-8 border border-amber-100">
           {/* Product Image */}
           <div>
             <img 
               src={product.image}
               alt={product.name}
-              className="w-full h-96 object-cover rounded-lg mb-4"
+              className="w-full h-64 sm:h-80 md:h-96 object-cover rounded-lg mb-4"
             />
           </div>
 
@@ -59,18 +59,18 @@ export default function ProductDetailsPage() {
               <Icon name="tag" className="w-4 h-4" />
               {product.category}
             </p>
-            <h1 className="text-4xl font-bold text-gray-800 mb-4">{product.name}</h1>
+            <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-4">{product.name}</h1>
             
-            <p className="text-gray-600 text-lg mb-6">{product.description}</p>
+            <p className="text-gray-600 text-base sm:text-lg mb-6">{product.description}</p>
 
             {/* Price */}
             <div className="mb-6 pb-6 border-b border-gray-200">
-              <p className="text-4xl font-bold text-red-600">{formatPeso(product.price)}</p>
+              <p className="text-3xl sm:text-4xl font-bold text-red-600">{formatPeso(product.price)}</p>
             </div>
 
             {/* Stock Status */}
             <div className="mb-6">
-              <p className="text-lg">
+              <p className="text-base sm:text-lg">
                 <span className="font-semibold">Availability:</span>{' '}
                 <span className={product.stock > 0 ? 'text-green-600 font-semibold' : 'text-red-600 font-semibold'}>
                   {product.stock > 0 ? `In Stock (${product.stock} available)` : 'Out of Stock'}
@@ -79,18 +79,18 @@ export default function ProductDetailsPage() {
             </div>
 
             {/* Action Buttons */}
-            <div className="flex gap-4 mb-8">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-8">
               <Button 
                 variant="primary"
                 size="lg"
                 onClick={handleAddToCart}
                 disabled={product.stock === 0}
-                className="flex-1"
+                className="w-full sm:flex-1"
               >
                 <Icon name="cart" className="w-5 h-5" />
                 Add to Cart
               </Button>
-              <Link to="/products" className="flex-1">
+              <Link to="/products" className="w-full sm:flex-1">
                 <Button 
                   variant="secondary"
                   size="lg"
@@ -108,11 +108,11 @@ export default function ProductDetailsPage() {
                 <Icon name="shield" className="w-5 h-5 text-emerald-600" />
                 Product Information
               </h3>
-              <ul className="text-gray-700 space-y-1 text-sm">
-                <li className="flex items-center gap-2"><Icon name="checkCircle" className="w-4 h-4 text-emerald-600" />Premium quality motorcycle accessories</li>
-                <li className="flex items-center gap-2"><Icon name="truck" className="w-4 h-4 text-emerald-600" />Nationwide shipping available</li>
-                <li className="flex items-center gap-2"><Icon name="shield" className="w-4 h-4 text-emerald-600" />30-day money-back guarantee</li>
-                <li className="flex items-center gap-2"><Icon name="phone" className="w-4 h-4 text-emerald-600" />Free technical support</li>
+              <ul className="text-gray-700 space-y-2 text-sm">
+                <li className="flex items-start gap-2"><Icon name="checkCircle" className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />Premium quality motorcycle accessories</li>
+                <li className="flex items-start gap-2"><Icon name="truck" className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />Nationwide shipping available</li>
+                <li className="flex items-start gap-2"><Icon name="shield" className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />30-day money-back guarantee</li>
+                <li className="flex items-start gap-2"><Icon name="phone" className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />Free technical support</li>
               </ul>
             </div>
           </div>
@@ -120,7 +120,7 @@ export default function ProductDetailsPage() {
 
         {/* Related Products */}
         <div className="mt-12">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
             <Icon name="package" className="w-6 h-6 text-amber-600" />
             Other {product.category} Products
           </h2>

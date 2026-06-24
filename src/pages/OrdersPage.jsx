@@ -25,7 +25,7 @@ export default function OrdersPage() {
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
           <div>
-            <h1 className="text-4xl font-bold text-gray-800 flex items-center gap-3">
+            <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 flex items-center gap-3">
               <Icon name="receipt" className="w-8 h-8 text-red-600" />
               My Orders
             </h1>
@@ -49,7 +49,7 @@ export default function OrdersPage() {
                     <h2 className="text-xl font-bold text-red-600">{order.orderId}</h2>
                     <p className="text-sm text-gray-600 mt-1">Placed on {formatOrderDate(order)}</p>
                   </div>
-                  <div className="flex flex-col md:items-end gap-2">
+                  <div className="flex flex-col sm:flex-row md:flex-col md:items-end gap-2">
                     <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getFulfillmentStatusMeta(getFulfillmentStatus(order)).className}`}>
                       {getFulfillmentStatusMeta(getFulfillmentStatus(order)).label}
                     </span>
@@ -63,8 +63,8 @@ export default function OrdersPage() {
                 <div className="p-5 grid grid-cols-1 lg:grid-cols-3 gap-6">
                   <div className="lg:col-span-2 space-y-3">
                     {order.items.map(item => (
-                      <div key={item.id} className="flex items-center justify-between gap-4">
-                        <div>
+                      <div key={item.id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
+                        <div className="min-w-0">
                           <p className="font-semibold text-gray-800">{item.name}</p>
                           <p className="text-sm text-gray-500">Qty {item.quantity}</p>
                         </div>
@@ -90,7 +90,7 @@ export default function OrdersPage() {
             ))}
           </div>
         ) : (
-          <div className="bg-white rounded-lg shadow-md border border-amber-100 p-12 text-center">
+          <div className="bg-white rounded-lg shadow-md border border-amber-100 p-6 sm:p-12 text-center">
             <Icon name="receipt" className="w-12 h-12 text-amber-600 mx-auto mb-4" />
             <h2 className="text-2xl font-bold text-gray-800 mb-2">No orders yet</h2>
             <p className="text-gray-600 mb-6">Once you place an order, you can track it here.</p>

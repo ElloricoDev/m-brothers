@@ -10,14 +10,14 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-gray-950 via-red-900 to-amber-700 text-white py-16">
+      <div className="bg-gradient-to-r from-gray-950 via-red-900 to-amber-700 text-white py-12 sm:py-16">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="inline-flex items-center gap-2 bg-white/10 text-amber-100 px-4 py-2 rounded-full mb-4">
-            <Icon name="bike" className="w-5 h-5" />
-            <span className="font-semibold">M-Brothers Main Motorcycle Gears Trading</span>
+          <div className="inline-flex items-center gap-2 bg-white/10 text-amber-100 px-3 sm:px-4 py-2 rounded-full mb-4 max-w-full">
+            <Icon name="bike" className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
+            <span className="font-semibold text-xs sm:text-sm truncate">M-Brothers Main Motorcycle Gears Trading</span>
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Welcome to MBrothers</h1>
-          <p className="text-xl mb-8 text-amber-100">Your source for motorcycle gears, accessories, and riding essentials</p>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">Welcome to MBrothers</h1>
+          <p className="text-base sm:text-xl mb-8 text-amber-100">Your source for motorcycle gears, accessories, and riding essentials</p>
           <Link to="/products">
             <Button variant="secondary" size="lg">
               <Icon name="package" className="w-5 h-5" />
@@ -29,8 +29,8 @@ export default function HomePage() {
 
       {/* Categories Section */}
       <div className="max-w-7xl mx-auto px-4 py-12">
-        <h2 className="text-3xl font-bold text-gray-800 mb-8 flex items-center gap-3">
-          <Icon name="tag" className="w-7 h-7 text-red-600" />
+        <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6 sm:mb-8 flex items-center gap-3">
+          <Icon name="tag" className="w-6 h-6 sm:w-7 sm:h-7 text-red-600 shrink-0" />
           Shop by Category
         </h2>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
@@ -49,11 +49,11 @@ export default function HomePage() {
 
       {/* Featured Products Section */}
       <div className="max-w-7xl mx-auto px-4 py-12">
-        <h2 className="text-3xl font-bold text-gray-800 mb-8 flex items-center gap-3">
-          <Icon name="shield" className="w-7 h-7 text-emerald-600" />
+        <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6 sm:mb-8 flex items-center gap-3">
+          <Icon name="shield" className="w-6 h-6 sm:w-7 sm:h-7 text-emerald-600 shrink-0" />
           Featured Products
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
           {featuredProducts.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
@@ -63,8 +63,8 @@ export default function HomePage() {
       {/* CTA Section */}
       <div className="bg-gray-900 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-4">Ready to Ride?</h2>
-          <p className="text-xl mb-8 text-amber-100">Browse our complete collection of motorcycle gears and accessories</p>
+          <h2 className="text-2xl sm:text-3xl font-bold mb-4">Ready to Ride?</h2>
+          <p className="text-base sm:text-xl mb-8 text-amber-100">Browse our complete collection of motorcycle gears and accessories</p>
           <Link to="/products">
             <Button variant="secondary" size="lg">
               <Icon name="cart" className="w-5 h-5" />

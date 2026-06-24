@@ -82,7 +82,7 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gray-50 py-8 pb-28 lg:pb-8">
       <div className="max-w-6xl mx-auto px-4">
         <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-8 flex items-center gap-3">
           <Icon name="creditCard" className="w-8 h-8 text-red-600" />
@@ -92,7 +92,7 @@ export default function CheckoutPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Checkout Form */}
           <div className="lg:col-span-2">
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form id="checkout-form" onSubmit={handleSubmit} className="space-y-6">
               {/* Personal Information */}
               <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 border border-amber-100">
                 <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
@@ -301,12 +301,12 @@ export default function CheckoutPage() {
                 )}
               </div>
 
-              <Button 
+              <Button
                 type="submit"
                 variant="primary"
                 size="lg"
                 disabled={loading}
-                className="w-full"
+                className="w-full hidden lg:flex"
               >
                 <Icon name={loading ? 'truck' : 'checkCircle'} className="w-5 h-5" />
                 {loading ? 'Processing...' : 'Place Order'}
@@ -352,6 +352,26 @@ export default function CheckoutPage() {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      <div className="fixed bottom-0 left-0 right-0 z-30 lg:hidden bg-white border-t border-gray-200 shadow-[0_-4px_12px_rgba(0,0,0,0.08)] px-4 py-3">
+        <div className="max-w-6xl mx-auto flex items-center justify-between gap-4">
+          <div className="min-w-0">
+            <p className="text-xs text-gray-500">Total</p>
+            <p className="text-lg font-bold text-red-600 truncate">{formatPeso(totals.total)}</p>
+          </div>
+          <Button
+            type="submit"
+            form="checkout-form"
+            variant="primary"
+            size="lg"
+            disabled={loading}
+            className="flex-1 max-w-xs"
+          >
+            <Icon name={loading ? 'truck' : 'checkCircle'} className="w-5 h-5" />
+            {loading ? 'Processing...' : 'Place Order'}
+          </Button>
         </div>
       </div>
     </div>

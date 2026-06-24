@@ -124,7 +124,7 @@ export default function ProductDetailsPage() {
             <Icon name="package" className="w-6 h-6 text-amber-600" />
             Other {product.category} Products
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
             {mockProducts
               .filter(p => p.category === product.category && p.id !== product.id)
               .slice(0, 4)

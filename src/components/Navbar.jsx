@@ -39,15 +39,29 @@ export default function Navbar() {
           <span className="truncate">MBrothers</span>
         </Link>
 
-        <button
-          type="button"
-          onClick={() => setIsMenuOpen(prev => !prev)}
-          className="md:hidden p-2 rounded-lg hover:bg-gray-900 transition"
-          aria-label={isMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
-          aria-expanded={isMenuOpen}
-        >
-          <Icon name={isMenuOpen ? 'close' : 'menu'} className="w-6 h-6" />
-        </button>
+        <div className="md:hidden flex items-center gap-1">
+          <NavLink
+            to="/cart"
+            className={cartLinkClass}
+            aria-label={`Cart${cartCount > 0 ? `, ${cartCount} items` : ''}`}
+          >
+            <Icon name="cart" className="w-6 h-6" />
+            {cartCount > 0 && (
+              <span className="absolute -top-1 -right-1 bg-amber-400 text-gray-950 text-xs font-bold rounded-full min-w-5 h-5 px-1 flex items-center justify-center">
+                {cartCount}
+              </span>
+            )}
+          </NavLink>
+          <button
+            type="button"
+            onClick={() => setIsMenuOpen(prev => !prev)}
+            className="p-2 rounded-lg hover:bg-gray-900 transition"
+            aria-label={isMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-expanded={isMenuOpen}
+          >
+            <Icon name={isMenuOpen ? 'close' : 'menu'} className="w-6 h-6" />
+          </button>
+        </div>
 
         <ul className="hidden md:flex gap-6 items-center">
           <li>

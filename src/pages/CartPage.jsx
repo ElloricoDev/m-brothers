@@ -31,7 +31,7 @@ export default function CartPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gray-50 py-8 pb-28 lg:pb-8">
       <div className="max-w-6xl mx-auto px-4">
         <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-8 flex items-center gap-3">
           <Icon name="cart" className="w-8 h-8 text-red-600" />
@@ -108,6 +108,25 @@ export default function CartPage() {
               </Button>
             </Link>
           </div>
+        </div>
+      </div>
+
+      <div className="fixed bottom-0 left-0 right-0 z-30 lg:hidden bg-white border-t border-gray-200 shadow-[0_-4px_12px_rgba(0,0,0,0.08)] px-4 py-3">
+        <div className="max-w-6xl mx-auto flex items-center justify-between gap-4">
+          <div className="min-w-0">
+            <p className="text-xs text-gray-500">Total</p>
+            <p className="text-lg font-bold text-red-600 truncate">{formatPeso(totals.total)}</p>
+          </div>
+          <Link
+            to={isAuthenticated ? '/checkout' : '/login'}
+            state={isAuthenticated ? undefined : { from: { pathname: '/checkout' } }}
+            className="flex-1 max-w-xs"
+          >
+            <Button variant="primary" size="lg" className="w-full">
+              <Icon name="creditCard" className="w-5 h-5" />
+              {isAuthenticated ? 'Checkout' : 'Login'}
+            </Button>
+          </Link>
         </div>
       </div>
     </div>

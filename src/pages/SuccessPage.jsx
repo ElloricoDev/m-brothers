@@ -23,35 +23,35 @@ export default function SuccessPage() {
   }, [orderId]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-green-50 to-green-100 flex items-center justify-center py-12 px-4">
-      <div className="text-center bg-white rounded-lg shadow-2xl p-8 max-w-2xl">
+    <div className="min-h-screen bg-gradient-to-b from-green-50 to-green-100 flex items-center justify-center py-8 sm:py-12 px-4">
+      <div className="text-center bg-white rounded-lg shadow-2xl p-5 sm:p-8 max-w-2xl w-full">
         {/* Success Icon */}
-        <Icon name="checkCircle" className="w-16 h-16 text-emerald-600 mx-auto mb-4" />
+        <Icon name="checkCircle" className="w-14 h-14 sm:w-16 sm:h-16 text-emerald-600 mx-auto mb-4" />
 
-        <h1 className="text-4xl font-bold text-green-600 mb-2">Order Confirmed!</h1>
-        <p className="text-gray-600 text-lg mb-8">Thank you for your purchase. Your order has been successfully placed.</p>
+        <h1 className="text-3xl sm:text-4xl font-bold text-green-600 mb-2">Order Confirmed!</h1>
+        <p className="text-gray-600 text-base sm:text-lg mb-6 sm:mb-8">Thank you for your purchase. Your order has been successfully placed.</p>
 
         {/* Order Details */}
         {order && (
-          <div className="bg-gray-50 rounded-lg p-6 mb-8 text-left">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <div className="bg-gray-50 rounded-lg p-4 sm:p-6 mb-6 sm:mb-8 text-left">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-6">
               <div>
-                <p className="text-gray-600 font-semibold flex items-center gap-2">
-                  <Icon name="receipt" className="w-4 h-4 text-red-600" />
+                <p className="text-gray-600 font-semibold flex items-center gap-2 text-sm">
+                  <Icon name="receipt" className="w-4 h-4 text-red-600 shrink-0" />
                   Order Number
                 </p>
-                <p className="text-2xl font-bold text-red-600">{order.orderId}</p>
+                <p className="text-xl sm:text-2xl font-bold text-red-600 break-all">{order.orderId}</p>
               </div>
               <div>
-                <p className="text-gray-600 font-semibold flex items-center gap-2">
-                  <Icon name="calendar" className="w-4 h-4 text-amber-600" />
+                <p className="text-gray-600 font-semibold flex items-center gap-2 text-sm">
+                  <Icon name="calendar" className="w-4 h-4 text-amber-600 shrink-0" />
                   Order Date
                 </p>
-                <p className="text-2xl font-bold text-gray-800">{formatOrderDate(order)}</p>
+                <p className="text-xl sm:text-2xl font-bold text-gray-800">{formatOrderDate(order)}</p>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-6 border-b border-gray-200">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 pb-6 border-b border-gray-200">
               <div>
                 <p className="text-gray-600 font-semibold mb-2">Customer Name</p>
                 <p className="text-gray-800">{order.customerName}</p>
@@ -74,9 +74,9 @@ export default function SuccessPage() {
               <p className="text-gray-600 font-semibold mb-3">Items Ordered</p>
               <div className="space-y-2">
                 {order.items.map(item => (
-                  <div key={item.id} className="flex justify-between text-gray-800">
-                    <span>{item.name} x {item.quantity}</span>
-                    <span>{formatPeso(item.price * item.quantity)}</span>
+                  <div key={item.id} className="flex justify-between gap-3 text-sm sm:text-base text-gray-800">
+                    <span className="min-w-0 truncate">{item.name} x {item.quantity}</span>
+                    <span className="shrink-0">{formatPeso(item.price * item.quantity)}</span>
                   </div>
                 ))}
               </div>

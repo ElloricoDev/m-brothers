@@ -37,15 +37,15 @@ export default function ProfilePage() {
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-6xl mx-auto px-4">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-800 flex items-center gap-3">
-            <Icon name="user" className="w-8 h-8 text-red-600" />
+          <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 flex items-center gap-3">
+            <Icon name="user" className="w-7 h-7 sm:w-8 sm:h-8 text-red-600 shrink-0" />
             My Profile
           </h1>
           <p className="text-gray-600 mt-2">Manage your account details and shopping activity.</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 bg-white rounded-lg shadow-md border border-amber-100 p-6">
+          <div className="lg:col-span-2 bg-white rounded-lg shadow-md border border-amber-100 p-4 sm:p-6">
             <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
               <Icon name="user" className="w-6 h-6 text-amber-600" />
               Account Details
@@ -93,22 +93,22 @@ export default function ProfilePage() {
             </form>
           </div>
 
-          <div className="space-y-6">
-            <div className="bg-white rounded-lg shadow-md border border-red-100 p-6">
+          <div className="grid grid-cols-2 lg:grid-cols-1 gap-4 sm:gap-6">
+            <div className="bg-white rounded-lg shadow-md border border-red-100 p-4 sm:p-6">
               <h3 className="text-gray-600 font-semibold mb-2 flex items-center gap-2">
                 <Icon name="receipt" className="w-5 h-5 text-red-600" />
                 Orders
               </h3>
-              <p className="text-4xl font-bold text-red-600">{userOrders.length}</p>
+              <p className="text-2xl sm:text-4xl font-bold text-red-600">{userOrders.length}</p>
             </div>
-            <div className="bg-white rounded-lg shadow-md border border-emerald-100 p-6">
+            <div className="bg-white rounded-lg shadow-md border border-emerald-100 p-4 sm:p-6">
               <h3 className="text-gray-600 font-semibold mb-2 flex items-center gap-2">
                 <Icon name="dollar" className="w-5 h-5 text-emerald-600" />
                 Total Spent
               </h3>
-              <p className="text-4xl font-bold text-green-600">{formatPeso(totalSpent)}</p>
+              <p className="text-2xl sm:text-4xl font-bold text-green-600">{formatPeso(totalSpent)}</p>
             </div>
-            <div className="bg-white rounded-lg shadow-md border border-amber-100 p-6">
+            <div className="bg-white rounded-lg shadow-md border border-amber-100 p-4 sm:p-6 col-span-2 lg:col-span-1">
               <h3 className="text-gray-800 font-bold mb-3 flex items-center gap-2">
                 <Icon name="truck" className="w-5 h-5 text-amber-600" />
                 Latest Order
